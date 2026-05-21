@@ -1,0 +1,142 @@
+.catalog-page {
+  min-height: 100vh;
+  background: #f8f6f1;
+  padding: 3rem 2rem;
+}
+
+.catalog-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.catalog-header h1 {
+  color: #b88900;
+  font-size: 2.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.catalog-header p {
+  color: #555;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 320px));
+  gap: 2rem;
+  justify-content: center;
+}
+
+.product-card {
+  background: white;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid #eee4cd;
+  box-shadow: 0 14px 30px rgba(122, 88, 15, 0.08);
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(122, 88, 15, 0.14);
+}
+
+.product-card img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  background: #f5efe1;
+}
+
+.product-info {
+  padding: 1.3rem;
+}
+
+.product-info h2 {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.product-info p {
+  color: #555;
+}
+
+.product-info strong {
+  color: #b88900;
+  font-size: 1.2rem;
+}
+
+.product-info span {
+  display: block;
+  margin-top: 0.8rem;
+}
+.add-cart-button {
+  margin-top: 1rem;
+  width: 100%;
+  height: 46px;
+  border: none;
+  border-radius: 999px;
+  background: #111;
+  color: white;
+  font-weight: 800;
+  cursor: pointer;
+}
+.product-info .add-cart-button {
+  margin-top: 1rem;
+  width: 100%;
+  height: 48px;
+  border: none;
+  border-radius: 999px;
+  background: #111;
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.95rem;
+  cursor: pointer;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.14);
+  transition: 0.25s ease;
+}
+
+.product-info .add-cart-button:hover {
+  background: #b88900;
+  transform: translateY(-2px);
+}
+.promo-box {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0.75rem 0 0.5rem;
+}
+
+.promo-badge {
+  background: #111;
+  color: #fff;
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  font-weight: 900;
+  font-size: 0.8rem;
+}
+
+.promo-text {
+  color: #b88700;
+  font-weight: 800;
+  font-size: 0.85rem;
+}
+
+.price-box {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0.5rem 0 1rem;
+}
+
+.old-price {
+  color: #8a8f98;
+  text-decoration: line-through;
+  font-weight: 700;
+}
+
+.current-price {
+  color: #111;
+  font-size: 1.25rem;
+}

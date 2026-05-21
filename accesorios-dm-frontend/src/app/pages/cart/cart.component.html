@@ -1,0 +1,125 @@
+<section class="cart-page">
+  <header class="cart-header">
+    <h1>Carrito de compras</h1>
+    <p>Revisa tus productos antes de continuar.</p>
+  </header>
+
+  <p *ngIf="items.length === 0" class="empty-cart">
+    Tu carrito está vacío.
+  </p>
+
+  <section class="cart-table" *ngIf="items.length > 0">
+    <div class="cart-row cart-head">
+      <span>Producto</span>
+      <span>Precio</span>
+      <span>Cantidad</span>
+      <span>Total</span>
+    </div>
+
+    <article class="cart-row" *ngFor="let item of items">
+      <div class="product-column">
+        <img [src]="item.product.imageUrl" [alt]="item.product.name" />
+
+        <div>
+          <h2>{{ item.product.name }}</h2>
+
+          <button type="button" (click)="remove(item.product.id)">
+            <i class="bi bi-trash"></i>
+            Eliminar
+          </button>
+        </div>
+      </div>
+
+      <strong class="price">
+        ${{ item.product.price | number:'1.0-0' }}
+      </strong>
+
+      <div class="quantity-control">
+        <button type="button" (click)="decrease(item.product.id)">−</button>
+        <span>{{ item.quantity }}</span>
+        <button type="button" (click)="increase(item.product.id)">+</button>
+      </div>
+
+      <strong class="line-total">
+        ${{ item.product.price * item.quantity | number:'1.0-0' }}
+      </strong>
+    </article>
+  </section>
+
+  <section class="cart-summary" *ngIf="items.length > 0">
+    <div>
+      <span>Total</span>
+      <strong>${{ total | number:'1.0-0' }}</strong>
+    </div>
+
+    <button type="button" (click)="openCheckout()">
+      Finalizar compra
+    </button>
+  </section>
+
+  <section class="checkout-section" *ngIf="items.length > 0 && showCheckout">
+    <div class="checkout-layout">
+      <form class="checkout-form" (ngSubmit)="finishPurchase()">
+        <h2>Finalizar compra</h2>
+        <p>Completa tus datos para generar tu pedido por WhatsApp.</p>
+
+        <label>
+          Correo electrónico
+          <input type="email" name="correo" [(ngModel)]="checkoutForm.correo" />
+        </label>
+
+        <label>
+          Nombre completo
+          <input type="text" name="nombre" [(ngModel)]="checkoutForm.nombre" />
+        </label>
+
+        <label>
+          Dirección de envío
+          <input
+            type="text"
+            name="direccion_envio"
+            [(ngModel)]="checkoutForm.direccion_envio"
+          />
+        </label>
+
+        <label>
+          Teléfono
+          <input type="tel" name="telefono" [(ngModel)]="checkoutForm.telefono" />
+        </label>
+
+        <p class="success-message" *ngIf="successMessage">
+          {{ successMessage }}
+        </p>
+
+        <p class="error-message" *ngIf="errorMessage">
+          {{ errorMessage }}
+        </p>
+
+        <button type="submit" [disabled]="isSubmitting">
+          {{ isSubmitting ? 'Procesando pedido...' : 'Generar pedido por WhatsApp' }}
+        </button>
+      </form>
+
+      <aside class="checkout-summary">
+        <h3>Resumen del pedido</h3>
+
+        <article *ngFor="let item of items">
+          <img [src]="item.product.imageUrl" [alt]="item.product.name" />
+
+          <div>
+            <h4>{{ item.product.name }}</h4>
+            <span>{{ item.quantity }} unidad(es)</span>
+            <strong>
+              ${{ item.product.price * item.quantity | number:'1.0-0' }}
+            </strong>
+          </div>
+        </article>
+
+        <div class="checkout-total">
+          <span>Total</span>
+          <strong>${{ total | number:'1.0-0' }}</strong>
+        </div>
+      </aside>
+    </div>
+  </section>
+</section>

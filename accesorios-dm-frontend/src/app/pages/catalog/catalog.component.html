@@ -1,0 +1,74 @@
+<section class="catalog-page">
+  <header class="catalog-header">
+    <h1>Catálogo de productos</h1>
+    <p>Explora los accesorios disponibles en nuestra tienda.</p>
+  </header>
+
+  <p *ngIf="isLoading">Cargando productos...</p>
+
+  <p *ngIf="!isLoading && errorMessage" class="error">
+    {{ errorMessage }}
+  </p>
+
+  <p *ngIf="!isLoading && !errorMessage && products.length === 0">
+    No hay productos disponibles por el momento.
+  </p>
+
+  <div class="product-grid" *ngIf="!isLoading && products.length > 0">
+    <article
+      class="product-card"
+      *ngFor="let product of products"
+      [routerLink]="['/producto', product.id]"
+    >
+      <div class="product-image-wrapper">
+        <span class="discount-label" *ngIf="product.discountPercentage">
+          -{{ product.discountPercentage | number:'1.0-0' }}%
+        </span>
+
+        <img
+          [src]="product.imageUrl && !product.imageUrl.includes('product-placeholder.png')
+            ? product.imageUrl
+            : 'https://placehold.co/300x200?text=Producto'"
+          [alt]="product.name"
+        />
+      </div>
+
+      <div class="product-info">
+        <h2>{{ product.name }}</h2>
+
+        <p>
+          {{ product.description || product.category || 'Accesorio exclusivo' }}
+        </p>
+
+       <div class="promo-box" *ngIf="product.discountPercentage">
+  <span class="promo-badge">
+    {{ product.discountPercentage | number:'1.0-0' }}% OFF
+  </span>
+  <span class="promo-text">{{ product.promotionName }}</span>
+</div>
+
+<div class="price-box">
+  <span class="old-price" *ngIf="product.originalPrice">
+    Antes ${{ product.originalPrice | number:'1.0-0' }}
+  </span>
+
+  <strong class="current-price">
+    Ahora ${{ product.price | number:'1.0-0' }}
+  </strong>
+</div>
+
+        <small class="promo-name" *ngIf="product.promotionName">
+          {{ product.promotionName }}
+        </small>
+
+        <button
+          type="button"
+          class="add-cart-button"
+          (click)="addToCart($event, product)"
+        >
+          Agregar al carrito
+        </button>
+      </div>
+    </article>
+  </div>
+</section>

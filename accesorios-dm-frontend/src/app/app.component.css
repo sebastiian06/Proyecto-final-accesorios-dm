@@ -1,0 +1,41 @@
+
+
+/* Importar iconos de Bootstrap (asegúrate de haber hecho 'npm install bootstrap-icons') */
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css");
+
+/* Definir variables de marca y tipografía */
+:root {
+  --dm-gold: rgba(193, 154, 64, 0.2);; /* El color dorado exacto de tu diseño */
+  --dm-gold-hover: #8b6920; /* Un tono más oscuro para el hover de botones */
+  --dm-dark: #333333;
+  --dm-gray: #6c757d;
+  --bs-font-sans-serif: 'Poppins', sans-serif; /* O la fuente exacta que uses en Figma */
+}
+
+body {
+  background-color: #fdfdfd; /* Un blanco roto muy sutil para que resalte la card */
+  color: var(--dm-dark);
+}
+
+/* Sobrescribir estilos predeterminados de Bootstrap para que coincidan con tu marca */
+.text-warning {
+  color: var(--dm-gold) !important;
+}
+
+.btn-warning {
+  background-color: var(--dm-gold);
+  border-color: var(--dm-gold);
+  color: white;
+  font-weight: bold;
+}
+
+.btn-warning:hover {
+  background-color: var(--dm-gold-hover);
+  border-color: var(--dm-gold-hover);
+  color: white;
+}
+
+.form-control:focus {
+  border-color: var(--dm-gold);
+  box-shadow: 0 0 0 0.25rem rgba(193, 154, 64, 0.25);
+}

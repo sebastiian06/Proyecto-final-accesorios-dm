@@ -1,0 +1,567 @@
+<section class="admin-layout">
+  <aside class="admin-sidebar">
+    <h1>ACCESORIOS<br />D&M</h1>
+
+    <nav>
+      <button [class.active]="activeSection === 'dashboard'" (click)="setActiveSection('dashboard')">
+        Dashboard
+      </button>
+
+      <button *ngIf="canManageProducts" [class.active]="activeSection === 'productos'" (click)="setActiveSection('productos')">
+        Productos
+      </button>
+
+      <button *ngIf="canManageOrders" [class.active]="activeSection === 'pedidos'" (click)="setActiveSection('pedidos')">
+        Pedidos
+      </button>
+
+      <button *ngIf="isAdminUser" [class.active]="activeSection === 'cupones'" (click)="setActiveSection('cupones')">
+        Promociones
+      </button>
+      <button
+        *ngIf="isAdminUser"
+        [class.active]="activeSection === 'clientes'"
+        (click)="setActiveSection('clientes')"
+      >
+        Clientes
+      </button>
+      <button *ngIf="isAdminUser" [class.active]="activeSection === 'configuracion'" (click)="setActiveSection('configuracion')">
+        Configuración
+      </button>
+
+      <button class="logout-button" type="button" (click)="logout()">
+        Cerrar sesión
+      </button>
+    </nav>
+  </aside>
+
+  <main class="admin-content">
+    <header class="admin-header">
+      <h2>Panel administrador</h2>
+      <p>Administra contenido visible en web y app móvil.</p>
+    </header>
+
+    <section class="stats-grid" *ngIf="activeSection === 'dashboard'">
+      <article>
+        <span>Productos</span>
+        <strong>{{ products.length }}</strong>
+      </article>
+
+      <article>
+        <span>Pedidos</span>
+        <strong>{{ orders.length }}</strong>
+      </article>
+
+      <article>
+        <span>Empleados</span>
+        <strong>{{ employees.length }}</strong>
+      </article>
+
+      <article>
+        <span>Roles</span>
+        <strong>{{ roles.length }}</strong>
+      </article>
+    </section>
+
+    <ng-container *ngIf="activeSection === 'productos' && canManageProducts">
+      <section class="admin-grid">
+        <article class="admin-card image-card">
+          <h3>Imagen del producto</h3>
+
+          <div class="upload-box product-preview">
+            <img *ngIf="previewImage" [src]="previewImage" alt="Vista previa del producto" />
+            <span *ngIf="!previewImage">Selecciona una imagen para el producto</span>
+          </div>
+
+          <label class="gold-button upload-button">
+            Subir foto
+            <input type="file" accept="image/*" hidden (change)="onImageSelected($event)" />
+          </label>
+        </article>
+
+        <article class="admin-card">
+          <h3>{{ editingProductId ? 'Editar producto' : 'Crear producto' }}</h3>
+
+          <form (ngSubmit)="saveProduct()">
+            <label>
+              Nombre del producto
+              <input type="text" name="nombre" [(ngModel)]="newProduct.nombre" required />
+            </label>
+
+            <label>
+              Descripción
+              <textarea name="descripcion" [(ngModel)]="newProduct.descripcion" required></textarea>
+            </label>
+
+            <label>
+              Precio
+              <input type="number" name="precio" [(ngModel)]="newProduct.precio" min="1" required />
+            </label>
+
+            <label>
+              Stock de ingreso
+              <input type="number" name="stock" [(ngModel)]="newProduct.stock" min="1" required />
+            </label>
+
+            <label>
+              Categoría
+              <select name="idCategoria" [(ngModel)]="newProduct.idCategoria" required>
+                <option [ngValue]="0">Selecciona una categoría</option>
+                <option *ngFor="let category of categories" [ngValue]="category.idCategoria">
+                  {{ category.nombre }}
+                </option>
+              </select>
+            </label>
+
+            <label>
+              Material
+              <select name="idMaterial" [(ngModel)]="newProduct.idMaterial" required>
+                <option [ngValue]="0">Selecciona un material</option>
+                <option *ngFor="let material of materials" [ngValue]="material.idMaterial">
+                  {{ material.nombre }}
+                </option>
+              </select>
+            </label>
+
+            <p class="success-message" *ngIf="successMessage">{{ successMessage }}</p>
+            <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+            <button type="submit" class="black-button">
+              {{ editingProductId ? 'Guardar cambios' : 'Guardar producto' }}
+            </button>
+
+            <button *ngIf="editingProductId" type="button" class="cancel-button" (click)="cancelEdit()">
+              Cancelar edición
+            </button>
+          </form>
+        </article>
+      </section>
+
+      <section class="admin-card products-section">
+        <h3>Productos registrados</h3>
+
+        <p *ngIf="isLoading">Cargando productos...</p>
+
+        <div class="products-table" *ngIf="!isLoading">
+          <div class="table-header">
+            <span>Producto</span>
+            <span>Categoría</span>
+            <span>Precio</span>
+            <span>Stock</span>
+            <span>Acciones</span>
+          </div>
+
+          <div class="table-row" *ngFor="let product of products">
+            <div class="product-cell">
+              <img [src]="product.imageUrl" [alt]="product.name" />
+              <div>
+                <strong>{{ product.name }}</strong>
+                <small>{{ product.material || 'Accesorio' }}</small>
+              </div>
+            </div>
+
+            <span>{{ product.category || 'General' }}</span>
+            <span>${{ product.price | number:'1.0-0' }}</span>
+            <span>{{ product.stock }}</span>
+
+            <div class="actions">
+              <button type="button" class="edit-button" (click)="editProduct(product)">Editar</button>
+              <button type="button" class="delete-button" (click)="deleteProduct(product)">Eliminar</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </ng-container>
+
+    <section class="admin-card" *ngIf="activeSection === 'pedidos' && canManageOrders">
+      <h3>Pedidos realizados</h3>
+
+      <p class="success-message" *ngIf="ordersMessage">{{ ordersMessage }}</p>
+      <p *ngIf="isLoadingOrders">Cargando pedidos...</p>
+
+      <div class="orders-table" *ngIf="!isLoadingOrders">
+        <div class="orders-header">
+          <span>Pedido</span>
+          <span>Cliente</span>
+          <span>Estado</span>
+          <span>Cambiar</span>
+          <span>Total</span>
+          <span>Productos</span>
+          <span>Fecha</span>
+        </div>
+
+        <div class="orders-row" *ngFor="let order of orders">
+          <strong class="order-id">#{{ order.id_pedido }}</strong>
+
+          <div class="order-client">
+            <strong>{{ order.cliente.nombre }}</strong>
+            <small>{{ order.cliente.correo }}</small>
+          </div>
+
+          <span class="order-status">{{ order.estado }}</span>
+
+          <select
+            class="status-select"
+            [value]="order.estado_id"
+            [disabled]="isUpdatingOrder"
+            (change)="updateOrderStatus(order.id_pedido, $any($event.target).value)"
+          >
+            <option *ngFor="let status of orderStatuses" [value]="status.id_estado">
+              {{ status.nombre }}
+            </option>
+          </select>
+
+          <strong class="order-total">${{ order.total | number:'1.0-0' }}</strong>
+          <span>{{ order.cantidad_productos }}</span>
+          <span>{{ order.fecha_pedido | date:'short' }}</span>
+        </div>
+
+        <p *ngIf="orders.length === 0">No hay pedidos registrados todavía.</p>
+      </div>
+    </section>
+
+    <section class="admin-card" *ngIf="activeSection === 'cupones' && isAdminUser">
+      <div class="section-header">
+        <div>
+          <h2>Gestión de promociones</h2>
+          <p>Crea promociones y asígnalas a productos del catálogo.</p>
+        </div>
+      </div>
+
+      <div class="promo-grid">
+        <div class="promo-form-card">
+          <h3>{{ editingPromotionId ? 'Editar promoción' : 'Crear promoción' }}</h3>
+
+          <div class="form-group">
+            <label>Nombre</label>
+            <input type="text" [(ngModel)]="promotionForm.nombre" placeholder="Ej: Oferta fin de semana" />
+          </div>
+
+          <div class="form-group">
+            <label>Descripción</label>
+            <textarea rows="4" [(ngModel)]="promotionForm.descripcion" placeholder="Descripción de la promoción"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Porcentaje descuento</label>
+            <input type="number" [(ngModel)]="promotionForm.porcentajeDescuento" min="1" max="100" />
+          </div>
+
+          <div class="form-group">
+            <label>Fecha inicio</label>
+            <input type="datetime-local" [(ngModel)]="promotionForm.fechaInicio" />
+          </div>
+
+          <div class="form-group">
+            <label>Fecha fin</label>
+            <input type="datetime-local" [(ngModel)]="promotionForm.fechaFin" />
+          </div>
+
+          <div class="form-group">
+            <label>Estado</label>
+            <select [(ngModel)]="promotionForm.estado">
+              <option [ngValue]="true">Activa</option>
+              <option [ngValue]="false">Inactiva</option>
+            </select>
+          </div>
+
+          <button class="save-btn" type="button" (click)="savePromotion()">
+            {{ editingPromotionId ? 'Actualizar promoción' : 'Crear promoción' }}
+          </button>
+
+          <button *ngIf="editingPromotionId" class="cancel-btn" type="button" (click)="resetPromotionForm()">
+            Cancelar edición
+          </button>
+
+          <div class="success-message" *ngIf="promotionsMessage">
+            {{ promotionsMessage }}
+          </div>
+        </div>
+
+        <div class="promo-form-card">
+          <h3>Asignar promoción a producto</h3>
+
+          <div class="form-group">
+            <label>Promoción</label>
+            <select [(ngModel)]="promotionAssignment.idPromocion">
+              <option [ngValue]="0">Selecciona promoción</option>
+              <option *ngFor="let promotion of promotions" [ngValue]="promotion.idPromocion">
+                {{ promotion.nombre }} ({{ promotion.porcentajeDescuento }}%)
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Producto</label>
+            <select [(ngModel)]="promotionAssignment.idProducto">
+              <option [ngValue]="0">Selecciona producto</option>
+              <option *ngFor="let product of products" [ngValue]="product.id">
+                {{ product.name }}
+              </option>
+            </select>
+          </div>
+
+          <button class="save-btn" type="button" (click)="assignPromotionToProduct()">
+            Asignar promoción
+          </button>
+        </div>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Promoción</th>
+              <th>Descuento</th>
+              <th>Inicio</th>
+              <th>Fin</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let promotion of promotions">
+              <td>
+                <strong>{{ promotion.nombre }}</strong>
+                <div class="secondary-text">{{ promotion.descripcion }}</div>
+              </td>
+
+              <td>
+                <span class="discount-badge">{{ promotion.porcentajeDescuento }}%</span>
+              </td>
+
+              <td>{{ promotion.fechaInicio | date:'short' }}</td>
+              <td>{{ promotion.fechaFin | date:'short' }}</td>
+
+              <td>
+                <span class="status-badge" [class.status-active]="promotion.activo">
+                  {{ promotion.activo ? 'ACTIVA' : 'INACTIVA' }}
+                </span>
+              </td>
+
+              <td class="actions">
+                <button class="edit-btn" type="button" (click)="editPromotion(promotion)">Editar</button>
+                <button class="delete-btn" type="button" (click)="deletePromotion(promotion)">Eliminar</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p *ngIf="promotions.length === 0">No hay promociones registradas.</p>
+      </div>
+    </section>
+    <section class="admin-card" *ngIf="activeSection === 'clientes' && isAdminUser">
+  <h3>Clientes registrados</h3>
+
+  <p class="success-message" *ngIf="clientsMessage">{{ clientsMessage }}</p>
+
+  <div class="admin-grid" *ngIf="editingClientId">
+    <article class="admin-card">
+      <h3>Editar cliente</h3>
+
+      <form (ngSubmit)="saveClient()">
+        <label>
+          Nombre
+          <input type="text" name="clientName" [(ngModel)]="clientForm.nombre" />
+        </label>
+
+        <label>
+          Correo
+          <input type="email" name="clientEmail" [(ngModel)]="clientForm.correo" />
+        </label>
+
+        <label>
+          Teléfono
+          <input type="text" name="clientPhone" [(ngModel)]="clientForm.telefono" />
+        </label>
+
+        <label>
+          Estado
+          <select name="clientStatus" [(ngModel)]="clientForm.estado">
+            <option [ngValue]="true">Activo</option>
+            <option [ngValue]="false">Inactivo</option>
+          </select>
+        </label>
+
+        <button type="submit" class="black-button">Guardar cliente</button>
+
+        <button type="button" class="cancel-button" (click)="resetClientForm()">
+          Cancelar
+        </button>
+      </form>
+    </article>
+  </div>
+
+  <div class="users-table">
+    <div class="users-header">
+      <span>Cliente</span>
+      <span>Correo</span>
+      <span>Estado</span>
+      <span>Acciones</span>
+    </div>
+
+    <div class="users-row" *ngFor="let client of clients">
+      <strong>{{ client.nombre }}</strong>
+      <span>{{ client.correo }}</span>
+
+      <span
+        [class.active-user]="client.estado !== false"
+        [class.inactive-user]="client.estado === false"
+      >
+        {{ client.estado === false ? 'Inactivo' : 'Activo' }}
+      </span>
+
+      <div class="actions">
+        <button type="button" class="edit-button" (click)="editClient(client)">
+          Editar
+        </button>
+
+        <button type="button" class="delete-button" (click)="deleteClient(client)">
+          Eliminar
+         </button>
+        </div>
+      </div>
+    </div>
+  </section>
+    <ng-container *ngIf="activeSection === 'configuracion' && isAdminUser">
+      <section class="admin-grid">
+        <article class="admin-card">
+          <h3>{{ editingEmployeeId ? 'Editar empleado' : 'Crear empleado' }}</h3>
+
+          <form (ngSubmit)="saveEmployee()">
+            <label>
+              Nombre
+              <input type="text" name="employeeName" [(ngModel)]="employeeForm.nombre" />
+            </label>
+
+            <label>
+              Correo
+              <input type="email" name="employeeEmail" [(ngModel)]="employeeForm.correo" />
+            </label>
+
+            <label>
+              Contraseña
+              <input
+                type="password"
+                name="employeePassword"
+                [(ngModel)]="employeeForm.password"
+                [placeholder]="editingEmployeeId ? 'Opcional para actualizar' : 'Contraseña inicial'"
+              />
+            </label>
+
+            <label>
+              Rol
+              <select name="employeeRole" [(ngModel)]="employeeForm.id_rol">
+                <option [ngValue]="0">Selecciona un rol</option>
+                <option *ngFor="let role of roles" [ngValue]="role.id_rol">
+                  {{ role.nombre }}
+                </option>
+              </select>
+            </label>
+
+            <label>
+              Estado
+              <select name="employeeStatus" [(ngModel)]="employeeForm.estado">
+                <option [ngValue]="true">Activo</option>
+                <option [ngValue]="false">Inactivo</option>
+              </select>
+            </label>
+
+            <p class="success-message" *ngIf="usersMessage">{{ usersMessage }}</p>
+
+            <button type="submit" class="black-button">
+              {{ editingEmployeeId ? 'Guardar empleado' : 'Crear empleado' }}
+            </button>
+
+            <button *ngIf="editingEmployeeId" type="button" class="cancel-button" (click)="resetEmployeeForm()">
+              Cancelar edición
+            </button>
+          </form>
+        </article>
+
+        <article class="admin-card">
+          <h3>{{ editingRoleId ? 'Editar rol' : 'Crear rol' }}</h3>
+
+          <form (ngSubmit)="saveRole()">
+            <label>
+              Nombre del rol
+              <input type="text" name="roleName" [(ngModel)]="roleForm.nombre" />
+            </label>
+
+            <label>
+              Descripción
+              <textarea name="roleDescription" [(ngModel)]="roleForm.descripcion"></textarea>
+            </label>
+
+            <p class="success-message" *ngIf="rolesMessage">{{ rolesMessage }}</p>
+
+            <button type="submit" class="black-button">
+              {{ editingRoleId ? 'Guardar rol' : 'Crear rol' }}
+            </button>
+
+            <button *ngIf="editingRoleId" type="button" class="cancel-button" (click)="resetRoleForm()">
+              Cancelar edición
+            </button>
+          </form>
+        </article>
+      </section>
+
+      <section class="admin-card products-section">
+        <h3>Empleados registrados</h3>
+
+        <div class="users-table">
+          <div class="users-header">
+            <span>Empleado</span>
+            <span>Rol</span>
+            <span>Estado</span>
+            <span>Acciones</span>
+          </div>
+
+          <div class="users-row" *ngFor="let employee of employees">
+            <div>
+              <strong>{{ employee.nombre }}</strong>
+              <small>{{ employee.correo }}</small>
+            </div>
+
+            <span>{{ employee.rol_nombre || 'Sin rol' }}</span>
+
+            <span [class.active-user]="employee.estado" [class.inactive-user]="!employee.estado">
+              {{ employee.estado ? 'Activo' : 'Inactivo' }}
+            </span>
+
+            <div class="actions">
+              <button type="button" class="edit-button" (click)="editEmployee(employee)">Editar</button>
+              <button type="button" class="cancel-button" (click)="toggleEmployeeStatus(employee)">
+                {{ employee.estado ? 'Desactivar' : 'Activar' }}
+              </button>
+              <button type="button" class="delete-button" (click)="deleteEmployee(employee)">Eliminar</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="admin-card products-section">
+        <h3>Roles registrados</h3>
+
+        <div class="roles-table">
+          <div class="roles-header">
+            <span>Rol</span>
+            <span>Descripción</span>
+            <span>Acciones</span>
+          </div>
+
+          <div class="roles-row" *ngFor="let role of roles">
+            <strong>{{ role.nombre }}</strong>
+            <span>{{ role.descripcion || 'Sin descripción' }}</span>
+
+            <div class="actions">
+              <button type="button" class="edit-button" (click)="editRole(role)">Editar</button>
+              <button type="button" class="delete-button" (click)="deleteRole(role)">Eliminar</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </ng-container>
+  </main>
+</section>

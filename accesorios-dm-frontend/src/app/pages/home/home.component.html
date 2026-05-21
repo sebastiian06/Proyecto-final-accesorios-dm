@@ -1,0 +1,94 @@
+<section class="home-page">
+  <header class="main-header">
+    <div class="socials">
+      <a href="https://www.instagram.com/accesoriosdm14?igsh=ZGY3aXJseWthczZ5&utm_source=qr/" target="_blank" rel="noopener noreferrer">◎</a>
+      <a href="https://www.facebook.com/share/1JCbjVYCvR/?mibextid=wwXIfr/" target="_blank" rel="noopener noreferrer">f</a>
+      <a href="https://www.tiktok.com/@accesoriosdm14?_r=1&_t=ZS-96RroRuj4sv" target="_blank" rel="noopener noreferrer">♪</a>
+    </div>
+
+    <div class="brand">
+      <h1>ACCESORIOS D&M</h1>
+    </div>
+
+    <div class="header-actions">
+      <button type="button">⌕</button>
+
+      <button type="button" routerLink="/carrito" class="cart-icon-button">
+        <i class="bi bi-handbag-fill"></i>
+        <span *ngIf="cartCount > 0">{{ cartCount }}</span>
+      </button>
+    </div>
+  </header>
+
+  <nav class="categories-nav">
+    <a *ngFor="let category of categories" [routerLink]="category.path">
+      {{ category.name }}
+    </a>
+  </nav>
+
+  <section class="hero-banner">
+    <div class="hero-overlay">
+      <span>Nueva colección</span>
+
+      <h2>
+        Accesorios<br />
+        exclusivos
+      </h2>
+
+      <p>Elegancia y estilo para cada ocasión.</p>
+
+      <a routerLink="/catalogo" class="hero-cta">
+        Comprar ahora
+      </a>
+    </div>
+  </section>
+
+  <section class="featured-section">
+    <div class="section-header">
+      <h3>Productos destacados</h3>
+
+      <a routerLink="/catalogo">
+        Ver todos
+      </a>
+    </div>
+
+    <div class="featured-grid">
+      <article
+        class="product-card"
+        *ngFor="let product of products"
+        [routerLink]="['/producto', product.id]"
+      >
+        <img [src]="product.imageUrl" [alt]="product.name" />
+
+        <div class="product-info">
+          <h4>{{ product.name }}</h4>
+
+          <p>{{ product.category || 'Accesorios' }}</p>
+
+          <div class="promo-box" *ngIf="product.discountPercentage">
+  <span class="promo-badge">
+    {{ product.discountPercentage | number:'1.0-0' }}% OFF
+  </span>
+</div>
+
+<div class="price-box">
+  <span class="old-price" *ngIf="product.originalPrice">
+    Antes ${{ product.originalPrice | number:'1.0-0' }}
+  </span>
+
+  <strong class="current-price">
+    Ahora ${{ product.price | number:'1.0-0' }}
+  </strong>
+</div>
+          <button
+            type="button"
+            class="add-cart-button"
+            (click)="addToCart($event, product)"
+          >
+            Agregar al carrito
+          </button>
+        </div>
+      </article>
+    </div>
+  </section>
+</section>

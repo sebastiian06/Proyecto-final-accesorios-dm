@@ -1,0 +1,14 @@
+/* Este es el dorado de tus categorías para los botones de añadir */
+.btn-dorado {
+    background-color: #c19a40 !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 8px;
+    padding: 10px;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+.btn-dorado:hover {
+    background-color: #a68235 !important; /* Un poco más oscuro al pasar el mouse */
+}

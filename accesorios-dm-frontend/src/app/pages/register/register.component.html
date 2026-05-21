@@ -1,0 +1,56 @@
+<div class="container d-flex justify-content-center align-items-center py-5" style="min-height: 100vh;">
+  <div class="card shadow-lg p-4 text-center" style="max-width: 450px; width: 100%; border-radius: 20px;">
+
+    <div class="text-start mb-2">
+      <a routerLink="/inicio" class="btn btn-light rounded-circle shadow-sm text-warning">
+        <i class="bi bi-arrow-left"></i>
+      </a>
+    </div>
+
+    <div class="mb-4">
+      <img src="logo.jpeg" alt="Logo" style="width: 100px; height: 100px; border-radius: 50%; border: 3px solid #c19a40; object-fit: cover;" class="shadow-sm mb-3">
+      <h2 class="fw-bold" style="color: #c19a40;">CREAR CUENTA</h2>
+      <p class="text-muted small">Únete a Accesorios DM</p>
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+      <div class="input-group mb-3">
+        <span class="input-group-text bg-white border-end-0"><i class="bi bi-person text-warning"></i></span>
+        <input type="text" formControlName="nombreCompleto" class="form-control border-start-0" placeholder="Nombre completo">
+      </div>
+
+      <div class="input-group mb-3">
+        <span class="input-group-text bg-white border-end-0"><i class="bi bi-envelope text-warning"></i></span>
+        <input type="email" formControlName="correo" class="form-control border-start-0" placeholder="Correo electrónico">
+      </div>
+
+      <div class="input-group mb-3">
+        <span class="input-group-text bg-white border-end-0"><i class="bi bi-telephone text-warning"></i></span>
+        <input type="tel" formControlName="telefono" class="form-control border-start-0" placeholder="Teléfono">
+      </div>
+
+      <div class="input-group mb-3">
+        <span class="input-group-text bg-white border-end-0"><i class="bi bi-lock text-warning"></i></span>
+        <input type="password" formControlName="password" class="form-control border-start-0" placeholder="Contraseña">
+      </div>
+
+      <div class="input-group mb-4">
+        <span class="input-group-text bg-white border-end-0"><i class="bi bi-lock text-warning"></i></span>
+        <input type="password" formControlName="confirmPassword" class="form-control border-start-0" placeholder="Confirmar contraseña">
+      </div>
+
+     <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+        <button type="submit" class="btn btn-dm-gold-solid w-100 fw-bold">
+          CREAR CUENTA
+        </button>
+    </form>
+    </form>
+
+    <div class="border-top pt-3">
+      <p class="small text-muted mb-2">¿Ya tienes cuenta?</p>
+      <button class="btn btn-outline-warning w-100 mt-3" [routerLink]="['/register']">
+        CREAR CUENTA
+      </button>
+    </div>
+  </div>
+</div>

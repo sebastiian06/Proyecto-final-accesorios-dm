@@ -1,0 +1,14 @@
+services:
+  frontend:
+    build: .
+    container_name: accesorios-dm-frontend-prod
+    restart: always
+    ports:
+      - "80:80"
+    networks:
+      - accesorios-dm-net-prod
+
+networks:
+  accesorios-dm-net-prod:
+    external: true
+    name: accesorios-dm-database_accesorios-network-prod

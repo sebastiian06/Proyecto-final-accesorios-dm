@@ -1,0 +1,97 @@
+<div class="container py-4">
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center p-3 rounded-4 bg-black text-white mb-3">
+    <div class="d-flex align-items-center gap-3">
+      <img src="/logo.jpeg" alt="logo" width="48" height="48" class="rounded-circle" />
+      <div>
+        <h5 class="mb-0">Accesorios DM</h5>
+        <small>"Nunca subestimes el poder de un buen accesorio"</small>
+      </div>
+    </div>
+
+    <div class="d-flex align-items-center gap-3">
+      <a routerLink="/cart" class="btn btn-dark position-relative">
+        🛒
+        <span
+          class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark">
+          {{ totalItems }}
+        </span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Buscador -->
+  <div class="mb-4">
+    <input
+      type="text"
+      class="form-control rounded-pill"
+      placeholder="Buscar accesorios..."
+    />
+  </div>
+
+  <!-- Categorías -->
+  <div class="card border-0 shadow-sm rounded-4 p-3 mb-4">
+    <h5 class="mb-3">Categorías</h5>
+
+    <div class="row g-2">
+      <div class="col-md-4">
+        <button class="btn btn-warning w-100 fw-bold" (click)="filtrarPorCategoria('COLLARES')">
+          COLLARES
+        </button>
+      </div>
+      <div class="col-md-4">
+        <button class="btn btn-warning w-100 fw-bold" (click)="filtrarPorCategoria('PULSERAS')">
+          PULSERAS
+        </button>
+      </div>
+      <div class="col-md-4">
+        <button class="btn btn-warning w-100 fw-bold" (click)="filtrarPorCategoria('ANILLOS')">
+          ANILLOS
+        </button>
+      </div>
+      <div class="col-md-4">
+        <button class="btn btn-dark w-100 fw-bold" (click)="mostrarTodos()">
+          TODOS
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Productos -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="mb-0">Productos</h4>
+    <small class="text-warning fw-bold">Mock / API</small>
+  </div>
+
+  <div class="row g-4" *ngIf="productosFiltrados.length > 0; else sinProductos">
+    <div class="col-md-4" *ngFor="let producto of productosFiltrados">
+      <div class="card h-100 border-0 shadow-sm rounded-4">
+        <img
+          [src]="producto.imageUrl || '/collar.png'"
+          class="card-img-top rounded-top-4"
+          alt="{{ producto.name }}"
+          style="height: 240px; object-fit: cover;"
+        />
+
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">{{ producto.name }}</h5>
+          <p class="text-muted mb-1">{{ producto.category || 'SIN CATEGORÍA' }}</p>
+          <p class="card-text">{{ producto.description || 'Sin descripción' }}</p>
+
+          <div class="mt-auto">
+            <h5 class="fw-bold text-warning">$ {{ producto.price | number }}</h5>
+            <button class="btn btn-dark w-100 mt-2" (click)="agregarAlCarrito(producto)">
+              Agregar al carrito
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #sinProductos>
+    <div class="alert alert-warning rounded-4">
+      No hay productos para mostrar.
+    </div>
+  </ng-template>
+</div>

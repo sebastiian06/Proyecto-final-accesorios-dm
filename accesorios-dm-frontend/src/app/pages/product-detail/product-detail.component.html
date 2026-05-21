@@ -1,0 +1,70 @@
+<section class="detail-page" *ngIf="!isLoading && product">
+
+  <div class="detail-image">
+    <img [src]="imageUrl" [alt]="product.name">
+  </div>
+
+  <div class="detail-info">
+
+    <span class="category">
+      {{ product.category }}
+    </span>
+
+    <h1>{{ product.name }}</h1>
+
+    <p class="description">
+      {{ product.description }}
+    </p>
+
+    <div class="promo-box" *ngIf="product.discountPercentage">
+  <span class="promo-badge">
+    {{ product.discountPercentage | number:'1.0-0' }}% OFF
+  </span>
+  <span class="promo-text">{{ product.promotionName }}</span>
+</div>
+
+<div class="price-box">
+  <span class="old-price" *ngIf="product.originalPrice">
+    Antes ${{ product.originalPrice | number:'1.0-0' }}
+  </span>
+
+  <h2 class="price">
+    Ahora ${{ product.price | number:'1.0-0' }}
+  </h2>
+</div>
+
+    <p class="stock">
+      Stock disponible: {{ product.stock }}
+    </p>
+
+<div class="purchase-actions">
+  <div class="quantity-selector">
+    <button type="button" (click)="decreaseQuantity()">−</button>
+    <span>{{ quantity }}</span>
+    <button type="button" (click)="increaseQuantity()">+</button>
+  </div>
+
+  <button class="add-cart-button" type="button" (click)="addToCart()">
+    <i class="bi bi-cart3"></i>
+    Agregar al carrito
+  </button>
+</div>
+<div class="cart-toast" *ngIf="showCartMessage">
+  Producto agregado al carrito
+</div>
+
+<button class="buy-now-button" type="button">
+  Comprar ahora
+</button>
+
+  </div>
+
+</section>
+
+<p *ngIf="isLoading">
+  Cargando producto...
+</p>
+
+<p *ngIf="!isLoading && errorMessage">
+  {{ errorMessage }}
+</p>
