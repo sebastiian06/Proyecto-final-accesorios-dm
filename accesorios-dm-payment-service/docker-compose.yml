@@ -1,0 +1,18 @@
+services:
+  payment-service:
+    build: .
+    container_name: accesorios-dm-payment-prod
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+    environment:
+      - PORT=9000
+      - DATABASE_URL=${DATABASE_URL}
+      - SECURITY_SERVICE_URL=${SECURITY_SERVICE_URL}
+    networks:
+      - accesorios-dm-net-prod
+
+networks:
+  accesorios-dm-net-prod:
+    external: true
+    name: accesorios-dm-database_accesorios-network-prod
