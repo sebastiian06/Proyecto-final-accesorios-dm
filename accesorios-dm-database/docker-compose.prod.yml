@@ -1,0 +1,46 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: accesorios-dm-postgres-prod
+    ports:
+      - "5432:5432"
+
+    environment:
+      POSTGRES_DB: accesorios_dm_db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_prod_data:/var/lib/postgresql/data
+    networks:
+      - accesorios-network-prod
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d accesorios_dm_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  liquibase:
+    image: liquibase/liquibase:4.25-alpine
+    container_name: accesorios-dm-liquibase-prod
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./:/liquibase/changelog
+    working_dir: /liquibase/changelog
+    command: >
+      liquibase update
+      --url=jdbc:postgresql://postgres:5432/accesorios_dm_db
+      --username=admin
+      --password=${DB_PASSWORD}
+      --changelog-file=changelog-master.yaml
+    networks:
+      - accesorios-network-prod
+
+volumes:
+  postgres_prod_data:
+
+networks:
+  accesorios-network-prod:
+    name: accesorios-dm-database_accesorios-network-prod
+    driver: bridge

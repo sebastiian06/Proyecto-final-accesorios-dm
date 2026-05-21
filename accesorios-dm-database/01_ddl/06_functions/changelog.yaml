@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001_update_stock_functions
+      author: JSA
+      changes:
+        - sqlFile:
+            path: 001_update_stock_functions.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+      rollback:
+        - sqlFile:
+            path: ../../../05_rollbacks/01_ddl/06_functions/001_update_stock_functions.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: true

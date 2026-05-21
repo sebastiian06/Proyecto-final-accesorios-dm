@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001_rls_policies
+      author: JSA
+      changes:
+        - sqlFile:
+            path: 001_rls_policies.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+      rollback:
+        - sqlFile:
+            path: ../../../05_rollbacks/03_dcl/02_policies/001_rls_policies.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: true

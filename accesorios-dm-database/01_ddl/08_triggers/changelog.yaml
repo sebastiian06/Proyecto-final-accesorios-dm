@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001_inventario_triggers
+      author: JSA
+      changes:
+        - sqlFile:
+            path: 001_inventario_triggers.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+      rollback:
+        - sqlFile:
+            path: ../../../05_rollbacks/01_ddl/08_triggers/001_inventario_triggers.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: true

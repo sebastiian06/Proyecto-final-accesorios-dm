@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001_enable_uuid_extension
+      author: JSA
+      changes:
+        - sqlFile:
+            path: 001_enable_uuid_extension.sql
+            relativeToChangelogFile: true
+            splitStatements: false
+      rollback:
+        - sqlFile:
+            path: ../../../05_rollbacks/01_ddl/00_extensions/001_enable_uuid_extension.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: false

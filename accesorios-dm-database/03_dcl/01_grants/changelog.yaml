@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001_grants
+      author: JSA
+      changes:
+        - sqlFile:
+            path: 001_grants.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+      rollback:
+        - sqlFile:
+            path: ../../../05_rollbacks/03_dcl/01_grants/001_grants.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: true

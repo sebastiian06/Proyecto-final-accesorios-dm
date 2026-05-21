@@ -1,0 +1,7 @@
+databaseChangeLog:
+  # Para transacciones manuales en el futuro
+  - changeSet:
+      id: placeholder
+      author: JSA
+      changes:
+        - sql: SELECT 1;

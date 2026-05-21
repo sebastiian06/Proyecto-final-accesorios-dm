@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001_initial_data
+      author: JSA
+      changes:
+        - sqlFile:
+            path: 001_initial_data.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+      rollback:
+        - sqlFile:
+            path: ../../../05_rollbacks/02_dml/00_inserts/001_initial_data.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: true

@@ -1,0 +1,111 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001_create_security_tables
+      author: JSA
+      changes:
+        - sqlFile:
+            path: 001_create_security_tables.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+      rollback:
+        - sqlFile:
+            path: ../../../05_rollbacks/01_ddl/03_tables/001_create_security_tables.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+
+  - changeSet:
+      id: 002_create_clientes_tables
+      author: JSA
+      changes:
+        - sqlFile:
+            path: 002_create_clientes_tables.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+      rollback:
+        - sqlFile:
+            path: ../../../05_rollbacks/01_ddl/03_tables/002_create_clientes_tables.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+
+  - changeSet:
+      id: 003_create_catalogo_tables
+      author: JSA
+      changes:
+        - sqlFile:
+            path: 003_create_catalogo_tables.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+      rollback:
+        - sqlFile:
+            path: ../../../05_rollbacks/01_ddl/03_tables/003_create_catalogo_tables.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+
+  - changeSet:
+      id: 004_create_imagen_producto_table
+      author: JSA
+      changes:
+        - sqlFile:
+            path: 004_create_imagen_producto_table.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+      rollback:
+        - sqlFile:
+            path: ../../../05_rollbacks/01_ddl/03_tables/004_create_imagen_producto_table.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+
+  - changeSet:
+      id: 005_create_promociones_tables
+      author: JSA
+      changes:
+        - sqlFile:
+            path: 005_create_promociones_tables.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+      rollback:
+        - sqlFile:
+            path: ../../../05_rollbacks/01_ddl/03_tables/005_create_promociones_tables.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+
+  - changeSet:
+      id: 006_create_carrito_tables
+      author: JSA
+      changes:
+        - sqlFile:
+            path: 006_create_carrito_tables.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+      rollback:
+        - sqlFile:
+            path: ../../../05_rollbacks/01_ddl/03_tables/006_create_carrito_tables.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+
+  - changeSet:
+      id: 007_create_pedidos_tables
+      author: JSA
+      changes:
+        - sqlFile:
+            path: 007_create_pedidos_tables.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+      rollback:
+        - sqlFile:
+            path: ../../../05_rollbacks/01_ddl/03_tables/007_create_pedidos_tables.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+  - changeSet:
+      id: 008_create_inventario_movimiento_table
+      author: JSA
+      changes:
+        - sqlFile:
+            path: 008_create_inventario_movimiento_table.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+      rollback:
+        - sqlFile:
+            path: ../../../05_rollbacks/01_ddl/03_tables/008_create_inventario_movimiento_table.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: true

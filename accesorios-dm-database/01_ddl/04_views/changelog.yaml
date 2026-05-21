@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001_report_views
+      author: JSA
+      changes:
+        - sqlFile:
+            path: 001_report_views.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+      rollback:
+        - sqlFile:
+            path: ../../../05_rollbacks/01_ddl/04_views/001_report_views.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: true

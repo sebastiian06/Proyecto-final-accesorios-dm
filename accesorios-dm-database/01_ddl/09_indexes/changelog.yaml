@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001_performance_indexes
+      author: JSA
+      changes:
+        - sqlFile:
+            path: 001_performance_indexes.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+      rollback:
+        - sqlFile:
+            path: ../../../05_rollbacks/01_ddl/09_indexes/001_performance_indexes.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: true

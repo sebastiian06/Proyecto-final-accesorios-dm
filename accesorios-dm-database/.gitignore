@@ -1,0 +1,49 @@
+# Docker
+<<<<<<< HEAD
+=======
+# Docker
+>>>>>>> qa
+.env
+*.log
+docker-compose.override.yml
+docker-compose.local.yml
+
+<<<<<<< HEAD
+# Liquibase - Ya no usamos archivo de propiedades
+=======
+<<<<<<< HEAD
+# Liquibase - Ya no usamos archivo de propiedades
+=======
+# Liquibase - archivos locales (no se versionan)
+>>>>>>> develop
+>>>>>>> qa
+liquibase.properties
+liquibase.properties.*
+*.tmp
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temp files
+<<<<<<< HEAD
+.tmp/
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+.tmp/
+=======
+.tmp/
+>>>>>>> develop
+=======
+.tmp/
+
+# Temp files
+.tmp/
+>>>>>>> develop
+>>>>>>> qa
