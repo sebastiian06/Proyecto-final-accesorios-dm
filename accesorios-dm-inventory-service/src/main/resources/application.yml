@@ -1,0 +1,59 @@
+spring:
+  application:
+    name: inventory-service
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 50MB
+  
+  datasource:
+    url: jdbc:postgresql://accesorios-dm-postgres-prod:5432/accesorios_dm_db
+    username: admin
+    password: admin123
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      connection-timeout: 30000
+      maximum-pool-size: 10
+      minimum-idle: 2
+  
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
+  
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api/v1
+
+# Configuración de almacenamiento de imágenes
+app:
+  storage:
+    images-path: /app/uploads/productos
+
+file:
+  upload-dir: uploads
+  
+logging:
+  level:
+    com.accesoriosdm.inventory: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
